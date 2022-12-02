@@ -1,9 +1,11 @@
 import './App.css';
+import Visualizer from './pathfinding/visualizer/Visualizer';
+
 
 function App() {
   return (
     <div className="app">
-       <h1>maze generator and pathfinding visualizer</h1>
+       <Visualizer/>
     </div>
   );
 }
