@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Node from './Node';
+import { randomMazeAlgorithm } from '../algorithms/mazeGenerator/randomMaze';
 
 
 
@@ -7,7 +8,8 @@ import Node from './Node';
 const x = 5; // start row
 const y = 8; // start col
 const z = 15; // end row
-const w = 61 // end col
+const w = 61; // end col
+const mazeSpeed = 10;
 
 export default class Visualizer extends Component {
 
@@ -15,7 +17,8 @@ export default class Visualizer extends Component {
         super();
         this.state = {
             grid: [],
-            mousePressed: false
+            mousePressed: false,
+            mazeGenerated: false,
         }
     }
 
@@ -56,6 +59,48 @@ export default class Visualizer extends Component {
     }
 
 
+    /*/ maze generation and animation /*/
+    // maze animation
+    mazeAnimation = (walls) => {
+        for (let i = 0; i <= walls.length; i++) {
+            if (i === walls.length) {
+                setTimeout(() => {
+                    this.resetGrid();
+                    let mazeGrid = getMazeGrid(this.state.grid, walls);
+                    this.setState({
+                        grid: mazeGrid,
+                        mazeGenerated: false,
+                    })
+                }, i * mazeSpeed);
+                return;
+            }
+            let wall = walls[i];
+            let node = this.state.grid[wall[0]][wall[1]];
+            
+            setTimeout(() => {
+                document.getElementById(`node-${node.row}-${node.col}`).className = "node maze-animation";
+            }, i* mazeSpeed);
+        }
+    }
+
+    // random maze generation
+    randomMaze() {
+        if (this.state.mazeGenerated) return;
+        this.setState({
+            mazeGenerated: true,
+        });
+
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i = grid[x][y];
+            const j = grid[z][w];
+            const walls = randomMazeAlgorithm(grid, i, j);
+            this.mazeAnimation(walls);
+        }, mazeSpeed);
+    };
+
+
+
     
   render() {
     const {grid, mousePressed} = this.state;
@@ -76,6 +121,10 @@ export default class Visualizer extends Component {
                     <div className='index' id='wall'></div>
                     <h4>wall</h4>
                 </div>
+            </div>
+            <div className='algorithms'>
+                <h4>generate Maze</h4>
+                <button className='algorithm-btn' onClick={() => this.randomMaze()}>Random</button>
             </div>
             <div>
                 <button className='reset-btn' onClick={() => this.resetGrid()}>Reset</button>
@@ -147,3 +196,17 @@ const getWalls = (grid, row, col) => {
     newGrid[row][col] = newNode;
     return newGrid;
 }
+
+// set grid with maze
+const getMazeGrid = (grid, walls) => {
+    let mazeGrid = grid.slice();
+    for (let wall of walls) {
+        let node = grid[wall[0]][wall[1]];
+        let newNode = {
+            ...node,
+            setWall: true,
+        };
+        mazeGrid[wall[0]][wall[1]] = newNode;
+    }
+    return mazeGrid;
+};
