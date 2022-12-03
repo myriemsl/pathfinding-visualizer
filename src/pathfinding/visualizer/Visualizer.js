@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Node from './Node';
 import { randomMazeAlgorithm } from '../algorithms/mazeGenerator/randomMaze';
-
+import { recursiveDivisionMazeAlgorithm } from '../algorithms/mazeGenerator/recursiveMaze';
 
 
 
@@ -99,6 +99,20 @@ export default class Visualizer extends Component {
         }, mazeSpeed);
     };
 
+    // recursive division maze
+    recursiveMaze() {
+        if (this.state.mazeGenerated) return;
+        this.setState({
+            mazeGenerated: true,
+        });
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i = grid[x][y];
+            const j = grid[z][w];
+            const walls = recursiveDivisionMazeAlgorithm(grid, i, j);
+            this.mazeAnimation(walls);
+        }, mazeSpeed);
+    }
 
 
     
@@ -125,6 +139,7 @@ export default class Visualizer extends Component {
             <div className='algorithms'>
                 <h4>generate Maze</h4>
                 <button className='algorithm-btn' onClick={() => this.randomMaze()}>Random</button>
+                <button className='algorithm-btn' onClick={() => this.recursiveMaze()}>Recursive</button>
             </div>
             <div>
                 <button className='reset-btn' onClick={() => this.resetGrid()}>Reset</button>
