@@ -5,7 +5,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Rubik', sans-serif;
-  color: #4b5075;
+  color: #363a5a;
   background-color: #fdfdfd;
 }
 
@@ -25,7 +25,7 @@
 
 /*/ grid /*/
 .grid {
-  border: 2px solid #4b5075;
+  border: 2px solid #363a5a;
   border-radius: 0.2em;
   height: max-content;
   width: max-content;
@@ -42,15 +42,19 @@
 }
 
 .start {
-  background-color: #fe81df;
+  background-color: #9d32e4;
+  mask-image: url('/src/start-node.svg');
+  -webkit-mask-image: url('/src/start-node.svg');  
+  background-size: 25em;
 }
 
 .end {
-  background-color: #56bbfa;
+  background-color: #9d32e4;
+  border-radius: 0.2em;
 }
 
 .wall {
-  background-color: #4b5075;
+  background-color: #363a5a;
 }
 
 .maze-animation {
@@ -66,22 +70,88 @@
 
 @keyframes maze-animation{
   0% {
-    transform: scale3d(0.3);
-    background-color: rgba(75, 80, 117, 0.564);
+    transform: scale(0.3);
+    background-color: #363a5a71;
   }
   50% {
-    transform: scale3d(0.5);
-    background-color: rgba(75, 80, 117, 0.705);
+    transform: scale(0.5);
+    background-color: #363a5ac2;
   }
   75% {
-    transform: scale3d((0.7));
-    background-color: rgba(75, 80, 117, 0.904);
+    transform: scale(0.7);
+    background-color: #363a5ade;
   }
   100% {
     transform: scale(1);
-    background-color: rgb(75, 80, 117);
+    background-color: #363a5a;
   }
 }
+
+.visited-animation {
+  animation-name: visited-animation;
+  animation-duration: 1.5s;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+  animation-iteration-count: 1;
+  border: 1px solid #e6e6ec;
+}
+
+@keyframes visited-animation{
+  0% {
+    transform: scale(0.3);
+    background-color: #0516ff;
+  }
+  50% {
+    transform: scale(0.5);
+    background-color: #0516ff4b;
+    border: 1px solid #02a0eff5;
+  }
+  75% {
+    transform: scale((0.7));
+    background-color: #02a0eff5;
+    border: 1px solid #0516ff4b;
+  }
+  100% {
+    transform: scale(1);
+      background-color: #d3d5fd;
+   }
+}
+
+.shortPath-animation {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  animation-name: pathAnimation;
+  animation-duration: 1.5s;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes pathAnimation{
+  0% {
+    transform: scale(0.3);
+    background-color: #fa50a86a;
+  }
+  50% {
+    transform: scale(0.5);
+    background-color: #fa50a8b2;
+  }
+  75% {
+    transform: scale((0.7));
+    background-color: #fa50a8e1;
+  }
+  100% {
+    transform: scale(1);
+    background-color: #fa50a8e1;
+  }
+}
+
 
 /*/ header /*/
 .header {
@@ -104,38 +174,74 @@
 }
 
 .details .index {
+  height: 10px;
+  width: 10px;
+}
+
+#start {
+  background-color: #9d32e4;
+  mask-image: url('/src/start-node.svg');
+  -webkit-mask-image: url('/src/start-node.svg');  
+  background-size: 25em;
   height: 15px;
   width: 15px;
 }
 
-#start {
-  background-color: #fe81df;
-}
-
 #end {
-  background-color: #56bbfa;
+  background-color: #9d32e4;
+  border-radius: 0.1em;
 }
 
 #wall {
-  background-color: #4b5075;
+  background-color: #363a5a;
+}
+
+#path {
+  background-color: #fa50a8e1;
+}
+
+#visited-one {
+  background-color: #02a0eff5;
+}
+
+#visited-two {
+  background-color: #dedcff;
+}
+
+#not-visited{
+  border: 1px solid #e6e6ec;
+  background-color: #fdfdfd;
+}
+
+.header .algorithms {
+  text-align: center;
 }
 
 .header button {
   margin: 0.1em;
   height: 2em;
-  width: 6em;
+  width: 5em;
   border-radius: 0.2em;
   outline: none;
-  border: 1px solid rgb(110, 115, 154);
+  border: 1px solid #363a5a;
   cursor: pointer;
 }
 
 .header .algorithm-btn {
-  background-color: #4b5075;
+  background-color: #363a5a;
   color: #fdfdfd;
 }
 
 .header .reset-btn {
-  color: rgb(110, 115, 154);
+  color: #363a5a;
   background-color: #fdfdfd;
+}
+
+.error {
+  display: none;
+}
+
+.error-checked {
+  color: #fc0101;
+  display: block;
 }

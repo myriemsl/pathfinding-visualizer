@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Node from './Node';
 import { randomMazeAlgorithm } from '../algorithms/mazeGenerator/randomMaze';
 import { recursiveDivisionMazeAlgorithm } from '../algorithms/mazeGenerator/recursiveMaze';
-
+import { dijkstraAlgorithm } from '../algorithms/pathFinding/dijkstraAlgorithm';
+import { getShortPath } from '../algorithms/pathFinding/shortPath';
+import { astarAlgorithm } from '../algorithms/pathFinding/astarAlgorithm';
 
 
 const x = 5; // start row
@@ -10,6 +12,7 @@ const y = 8; // start col
 const z = 15; // end row
 const w = 61; // end col
 const mazeSpeed = 10;
+const algorithmSpeed = 10;
 
 export default class Visualizer extends Component {
 
@@ -19,6 +22,8 @@ export default class Visualizer extends Component {
             grid: [],
             mousePressed: false,
             mazeGenerated: false,
+            algorithmVisualized: false,
+            error: false,
         }
     }
 
@@ -54,7 +59,9 @@ export default class Visualizer extends Component {
         }
         const newGrid = getGrid();
         this.setState({
-            grid: newGrid
+            grid: newGrid,
+            mazeGenerated: false,
+            error: false,
         })
     }
 
@@ -85,7 +92,7 @@ export default class Visualizer extends Component {
 
     // random maze generation
     randomMaze() {
-        if (this.state.mazeGenerated) return;
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
         this.setState({
             mazeGenerated: true,
         });
@@ -101,7 +108,7 @@ export default class Visualizer extends Component {
 
     // recursive division maze
     recursiveMaze() {
-        if (this.state.mazeGenerated) return;
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
         this.setState({
             mazeGenerated: true,
         });
@@ -114,7 +121,108 @@ export default class Visualizer extends Component {
         }, mazeSpeed);
     }
 
+    /*/ visualize algorithm and animation /*/
+    // short path animation
+    shortPathAnimation = (b, a) => {
+        // a = visited nodes in order, b = nodes path in order
+        if (b.length === 1) {
+            this.setState({
+              algorithmVisualized: false,
+              error: false,
+            });
+            document.getElementById('error').className = 'error error-checked'
+          };
+        for (let i = 1; i < b.length; i++) {
+            if (i === b.length - 1) {
+                setTimeout(() => {
+                    let newGrid = getUpdatedNodes(
+                      this.state.grid,
+                      b,
+                      a,
+                    );
+                    this.setState({
+                      grid: newGrid, 
+                      algorithmVisualized: false,
+                    })
+                  }, i * (3 * algorithmSpeed));
+                  return;
+            } else {
+                this.setState({
+                    error: true,
+                });
+                document.getElementById('error').className = "error"
+            }
+            let node = b[i];
+            setTimeout(() => {
+                document.getElementById(`node-${node.row}-${node.col}`).className = "node shortPath-animation"
+              }, i * (3 * algorithmSpeed));
+        }
+    }
 
+    // pathfinding animation
+    pathFindingAnimation = (a, b) => {
+        // a = visited nodes in order, b = nodes path in order
+        let newGrid = this.state.grid.slice();
+        for (let row of newGrid) {
+            for (let node of row) {
+                let newNode = {
+                    ...node, 
+                    visitedNode: false,
+                };
+                newGrid[node.row][node.col] = newNode;
+            };
+        }
+
+        this.setState({
+            grid: newGrid,
+        });
+        for (let i = 1; i <= a.length; i++) {
+            let node = a[i];
+            if (i === a.length){
+                setTimeout(() => {
+                    this.shortPathAnimation(b, a)
+                }, i * algorithmSpeed);
+                return;
+            }
+            setTimeout(() => {
+                document.getElementById(`node-${node.row}-${node.col}`).className = "node visited-animation"
+              }, i * algorithmSpeed); 
+        }
+    }
+
+    // dijkstra
+    Dijkstra() {
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
+        this.setState({
+            algorithmVisualized: true,
+        });
+
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i  = grid[x][y];
+            const j = grid[z][w];
+            const visitedNodes = dijkstraAlgorithm(grid, i, j);
+            const shortPath = getShortPath(j);
+            this.pathFindingAnimation(visitedNodes, shortPath)
+        }, algorithmSpeed);
+    }
+
+    // astar
+    Astar() {
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
+        this.setState({
+            algorithmVisualized: true,
+        });
+
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i  = grid[x][y];
+            const j = grid[z][w];
+            const visitedNodes = astarAlgorithm(grid, i, j);
+            const shortPath = getShortPath(j);
+            this.pathFindingAnimation(visitedNodes, shortPath)
+        }, algorithmSpeed);
+    }
     
   render() {
     const {grid, mousePressed} = this.state;
@@ -135,16 +243,35 @@ export default class Visualizer extends Component {
                     <div className='index' id='wall'></div>
                     <h4>wall</h4>
                 </div>
+                <div>
+                    <div className='index' id='path'></div>
+                    <h4>path</h4>          
+                </div>
+                <div>
+                    <div className='index' id='visited-one'></div>
+                    <div className='index' id='visited-two'></div>
+                    <h4>visited</h4>
+                </div>
+                <div>
+                    <div className='index' id='not-visited'></div>
+                    <h4>not visited</h4>
+                </div>
             </div>
             <div className='algorithms'>
                 <h4>generate Maze</h4>
                 <button className='algorithm-btn' onClick={() => this.randomMaze()}>Random</button>
                 <button className='algorithm-btn' onClick={() => this.recursiveMaze()}>Recursive</button>
             </div>
+            <div className='algorithms'>
+                <h4>pick algorithm</h4>
+                <button className='algorithm-btn' onClick={() => this.Dijkstra()}>Dijkstra</button>
+                <button className='algorithm-btn' onClick={() => this.Astar()}>Astar</button>
+            </div>
             <div>
                 <button className='reset-btn' onClick={() => this.resetGrid()}>Reset</button>
             </div>
         </div>
+        <span className='error' id='error'>no short path, reset and try again</span>
         <div className='grid'>
             {grid.map((row, rowIdx) => {
                 return (
@@ -197,6 +324,8 @@ const getNode = (col, row) => {
         end: row === z && col === w,
         setWall: false,
         distance: Infinity,
+        previousNode: null,
+        visitedNode: false,
     }
 };
 
@@ -225,3 +354,27 @@ const getMazeGrid = (grid, walls) => {
     }
     return mazeGrid;
 };
+
+// update nodes
+const getUpdatedNodes = (grid, b, a) => {
+    let newGrid = grid.slice();
+    for (let node of a) {
+        if ((node.row === x && node.col === y) ||
+       (node.row === z && node.col === w)) continue;
+
+       let newNode = {
+        ...node,
+        visitedNode: true,
+       };
+       newGrid[node.row][node.col] = newNode;
+    }
+    for (let node of b) {
+        if (node.row === z && node.col === w) return newGrid;
+    let newNode = {
+      ...node,
+      visitedNode: false,
+      shortestPath: true,
+    };
+    newGrid[node.row][node.col] = newNode;
+    }
+}
