@@ -32,7 +32,7 @@ export function astarAlgorithm(grid, i, j) {
         }
 
     }
-    return y;
+     return y;
 }
 
 function getNextNodes(node, grid) {
