@@ -5,7 +5,9 @@ import { recursiveDivisionMazeAlgorithm } from '../algorithms/mazeGenerator/recu
 import { dijkstraAlgorithm } from '../algorithms/pathFinding/dijkstraAlgorithm';
 import { getShortPath } from '../algorithms/pathFinding/shortPath';
 import { astarAlgorithm } from '../algorithms/pathFinding/astarAlgorithm';
-
+import { depthFirstSearchAlgorithm } from '../algorithms/pathFinding/dfsAlgorithm';
+import { breadthFirstSearchAlgorith } from "../algorithms/pathFinding/bfsAlgorithm";
+import { greedyBfsAlgorithm } from '../algorithms/pathFinding/greedyBfsAlgorithm';
 
 const x = 5; // start row
 const y = 8; // start col
@@ -223,12 +225,66 @@ export default class Visualizer extends Component {
             this.pathFindingAnimation(visitedNodes, shortPath)
         }, algorithmSpeed);
     }
+
+    // depth first search
+    Dfs() {
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
+        this.setState({
+            algorithmVisualized: true
+        });
+
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i  = grid[x][y];
+            const j = grid[z][w];
+            const visitedNodes = depthFirstSearchAlgorithm(grid, i, j);
+            const shortPath = getShortPath(j);
+            this.pathFindingAnimation(visitedNodes, shortPath);
+        }, algorithmSpeed);
+    }
+
+    // breadth first search
+    Bfs() {
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
+        this.setState({
+            algorithmVisualized: true
+        });
+
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i  = grid[x][y];
+            const j = grid[z][w];
+            const visitedNodes = breadthFirstSearchAlgorith(grid, i, j);
+            const shortestPath = getShortPath(j);
+            this.pathFindingAnimation(visitedNodes, shortestPath);
+        }, algorithmSpeed);
+    }
+
+    // greedy bfs
+    greedyBfs() {
+        if (this.state.algorithmVisualized || this.state.mazeGenerated) return;
+        this.setState({
+            algorithmVisualized: true
+        });
+
+        setTimeout(() => {
+            const { grid } = this.state;
+            const i = grid[x][y];
+            const j = grid[z][w];
+            const visitedNodes = greedyBfsAlgorithm(grid, i, j);
+            const shortestPath = getShortPath(j);
+            this.pathFindingAnimation(visitedNodes, shortestPath);
+        }, algorithmSpeed);
+
+    }
+
     
   render() {
     const {grid, mousePressed} = this.state;
     return (
       <div className='visualizer'>
         <h3>Maze Generator and PathFinding Visualizer</h3>
+        <p>Click on the grid to build walls, you can generate a maze, pick an algorithm to start visualizing. You can reset and start again.</p>
         <div className='header'>
             <div className='details'>
                 <div>
@@ -266,6 +322,9 @@ export default class Visualizer extends Component {
                 <h4>pick algorithm</h4>
                 <button className='algorithm-btn' onClick={() => this.Dijkstra()}>Dijkstra</button>
                 <button className='algorithm-btn' onClick={() => this.Astar()}>Astar</button>
+                <button className='algorithm-btn' onClick={() => this.Dfs()}>Dfs</button>
+                <button className='algorithm-btn' onClick={() => this.Bfs()}>Bfs</button>
+                <button className='algorithm-btn' onClick={() => this.greedyBfs()}>Greedy BFS</button>
             </div>
             <div>
                 <button className='reset-btn' onClick={() => this.resetGrid()}>Reset</button>
