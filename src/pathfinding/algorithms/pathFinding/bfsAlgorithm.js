@@ -1,7 +1,7 @@
 export function breadthFirstSearchAlgorith(grid, i, j) {
     // i = start index node, j = end index node,
-    // x = not visisted nodes, y = visited nodes in order, z = closest nodes,
-    // m = not visited nodes, n = not visited node,
+    // x = not visisted nodes, y = visited nodes in order, z = closest nodes
+    // m = not visited nodes, n = not visited node
 
     if (!i || !j || i === j) return false;
     let x = [];
@@ -10,7 +10,6 @@ export function breadthFirstSearchAlgorith(grid, i, j) {
 
     while (x.length !== 0) {
         let z = x.shift();
-
         if (z.setWall) continue;
         if (z === j) return y;
         y.push(z);
