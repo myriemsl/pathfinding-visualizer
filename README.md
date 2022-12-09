@@ -13,3 +13,6 @@
 ###### To use this application :
 ###### click on the grid to create walls, you can generate a maze
 ###### pick a pathfinding algorithm to start visualizing.
+
+
+![app](https://user-images.githubusercontent.com/74598067/206763613-cf3c3e39-33ef-454a-a910-e9d870ab3121.png)
