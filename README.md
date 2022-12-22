@@ -1,16 +1,1 @@
-## Maze Generator and PathFinding Visualizer
-
-
-#### Pathfinding algorithm is an algorithm for finding the shortest path between two points avoiding obstacles.
-##### In this Application, I implemented a recursive division maze and random maze generator algorithm.
-##### And unweighted algorithms: Depth First Search, Breadth First Search.
-##### I used weighted algorithms : Dijkstra, A* (Astar) and Greedy BFS.
-
-
-##### NOTE : Dijkstra, A* (Astar) and Breadth First Search guarantee short path.
-##### Greedy BFS and Depth First Search don't guarantee short path.
-
-
-###### To use this application :
-###### click on the grid to create walls, you can generate a maze
-###### pick a pathfinding algorithm to start visualizing.
+![app](https://user-images.githubusercontent.com/74598067/206771210-3a0d7c8f-d620-4ec8-b61d-bee61044d887.png)
