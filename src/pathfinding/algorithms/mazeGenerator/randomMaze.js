@@ -7,7 +7,7 @@ export function randomMazeAlgorithm(grid, i, j) {
 
     for (let row = 0; row < g.length; row++) {
        for (let col = 0; col < g[0].length; col++) {
-        if ((row === i.row && col === j.col) || 
+        if ((row === i.row && col === i.col) || 
              (row === j.row && col === j.col)) {
             continue;
         }
