@@ -16,8 +16,6 @@ export function randomMazeAlgorithm(grid, i, j) {
         }
        }
     }
-
     w.sort(() => Math.random() - 0.5)
     return w;
-    
 }

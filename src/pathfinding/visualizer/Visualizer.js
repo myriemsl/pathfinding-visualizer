@@ -284,7 +284,7 @@ export default class Visualizer extends Component {
     return (
       <div className='visualizer'>
         <h3>Maze Generator and PathFinding Visualizer</h3>
-        <p>Click on the grid to build walls, you can generate a maze, pick an algorithm to start visualizing. You can reset and start again.</p>
+        <p>Click on the grid to build walls, you can generate a maze, then pick an algorithm to start visualizing. You can reset and start again.</p>
         <div className='header'>
             <div className='details'>
                 <div>
